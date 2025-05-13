@@ -157,7 +157,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": true,
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -166,8 +166,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id       String  @id // Clerk User ID (e.g. \"user_abc123\") \n  rating   Int     @default(1500) // App-specific field \n  imageUrl String?\n}\n\n// npx prisma format\n// npx prisma migrate dev --name your_migration_name FOR MIGRATIONS, LATER\n// npx prisma db push BRUTAL PUSH\n// npx prisma generate GENERATE CLIENT\n",
-  "inlineSchemaHash": "a82e50683c94df606562fed174ca0cbbe57c158e037a2c2ea1df50f7af7509a4",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id       String  @id // Clerk User ID (e.g. \"user_abc123\") \n  rating   Int     @default(1500) // App-specific field \n  imageUrl String?\n}\n\n// npx prisma format\n// npx prisma migrate dev --name your_migration_name FOR MIGRATIONS, LATER\n// npx prisma db push BRUTAL PUSH\n// npx prisma generate GENERATE CLIENT \n",
+  "inlineSchemaHash": "c681a9d2c6c024d17183a7659300d4878b462ede43527affe94673833edd548f",
   "copyEngine": true
 }
 

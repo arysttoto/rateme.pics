@@ -23,4 +23,4 @@ model User {
 // npx prisma format
 // npx prisma migrate dev --name your_migration_name FOR MIGRATIONS, LATER
 // npx prisma db push BRUTAL PUSH
-// npx prisma generate GENERATE CLIENT
+// npx prisma generate GENERATE CLIENT 
