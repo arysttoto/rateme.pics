@@ -1,95 +1,119 @@
-<a href="https://precedent.dev">
-  <img alt="Precedent – Building blocks for your Next project" src="https://precedent.dev/opengraph-image" />
-  <h1 align="center">Precedent</h1>
-</a>
+---
 
-<p align="center">
-  Building blocks for your Next project
-</p>
+# rateme.pics
 
-<p align="center">
-  <a href="https://twitter.com/steventey">
-    <img src="https://img.shields.io/twitter/follow/steventey?style=flat&label=steventey&logo=twitter&color=0bf&logoColor=fff" alt="Steven Tey Twitter follower count" />
-  </a>
-  <a href="https://github.com/steven-tey/precedent">
-    <img src="https://img.shields.io/github/stars/steven-tey/precedent?label=steven-tey%2Fprecedent" alt="Precedent repo star count" />
-  </a>
-</p>
+![screenshot-placeholder](readme.png)
 
-<p align="center">
-  <a href="#introduction"><strong>Introduction</strong></a> ·
-  <a href="#one-click-deploy"><strong>One-click Deploy</strong></a> ·
-  <a href="#tech-stack--features"><strong>Tech Stack + Features</strong></a> ·
-  <a href="#author"><strong>Author</strong></a>
-</p>
-<br/>
+**rateme.pics** is a lightweight, just-for-fun web experiment inspired by Mark Zuckerberg's original FaceMash. Users upload photos and vote between pairs to determine which image looks better. It’s a social experiment in digital aesthetics and perception—built purely for entertainment and curiosity.
 
-## Introduction
+---
 
-Precedent is an opinionated collection of components, hooks, and utilities for your Next.js project.
+## 🛠 Tech Stack
 
-## One-click Deploy
+* **Next.js** – Handles the React frontend and server-side API routes.
+* **TypeScript** – Enables type-safe development across the full stack.
+* **Prisma** – ORM used to manage and query a **PostgreSQL** database storing:
 
-You can deploy this template to Vercel with the button below:
+  * User profiles
+  * Image metadata
+  * Elo-based ratings
+* **Clerk** – Simplifies user authentication via email or OAuth providers.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fsteven-tey%2Fprecedent&project-name=precedent&repository-name=precedent&demo-title=Precedent&demo-description=An%20opinionated%20collection%20of%20components%2C%20hooks%2C%20and%20utilities%20for%20your%20Next%20project.&demo-url=https%3A%2F%2Fprecedent.dev&demo-image=https%3A%2F%2Fprecedent.dev%2Fopengraph-image&env=NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,CLERK_SECRET_KEY&envDescription=Create%20a%20Clerk%20application%20to%20get%20these%20variables%3A&envLink=https%3A%2F%2Fdashboard.clerk.com%2Fapps%2Fnew)
+  * Automatically handles user login, logout, and sessions.
+  * **Webhooks** sync Clerk user events with the Prisma database:
 
-You can also clone & create this repo locally with the following command:
+    * On sign-up: creates a corresponding Prisma user.
+    * On delete: cleans up associated user data.
+* **Vercel Blob Storage** – Used for image uploads and hosting.
 
-```bash
-npx create-next-app precedent --example "https://github.com/steven-tey/precedent"
+  * When users upload an image, a blob is created and metadata is synced to Prisma.
+  * Images are served globally via Vercel’s edge network for fast loading.
+
+---
+
+## 🔐 Authentication Flow
+
+1. Users log in or sign up using Clerk.
+2. Clerk triggers **webhooks** to keep user data in sync with the Prisma database.
+3. All app actions (image uploads, ratings, etc.) are linked to an authenticated user.
+4. Client-side Clerk SDK simplifies session management and gating access.
+
+---
+
+## 🖼 Image Upload & Storage
+
+* Users can upload a photo directly through the site interface.
+* Uploaded images are stored in **Vercel Blob Storage**, with metadata like:
+
+  * Blob URL
+  * Associated user ID
+  * Timestamp
+* This metadata is stored in the database using **Prisma** and synced automatically.
+
+---
+
+## 📊 How the Rating System Works
+
+The main interaction on **rateme.pics** is selecting the better photo out of a randomly paired set of two.
+
+### 🧠 Rating Logic
+
+1. **Two images** with similar Elo ratings are selected.
+2. The user picks the one they think looks better.
+3. The system updates both images’ ratings using the **Elo formula**.
+
+### 🧮 Elo Formula
+
+We use the standard Elo rating system:
+
+```
+R' = R + K * (S - E)
 ```
 
-Then, install the dependencies with your package manager of choice:
+Where:
 
-```bash
-npm i
-yarn
-pnpm i
+* `R` = current rating
+* `K` = constant (e.g., 32)
+* `S` = actual result (1 = win, 0 = loss)
+* `E` = expected result (based on opponent’s rating)
+
+### 📈 Displayed Score
+
+To show ratings more clearly to users, we convert the raw Elo score to a normalized 1–10 scale:
+
+```
+Normalized Score = 10 * (Rating - MinRating) / (MaxRating - MinRating)
 ```
 
-## Tech Stack + Features
+* `MinRating` and `MaxRating` are dynamically determined from all image ratings.
+* This makes it easy to compare how well images perform on a familiar 1–10 scale.
 
-https://github.com/user-attachments/assets/aef3c099-e371-43bf-b426-f5ba73185a7c
+---
 
-### Frameworks
+## ⚠️ Disclaimer
 
-- [Next.js](https://nextjs.org/) – React framework for building performant apps with the best developer experience
-- [Clerk](https://go.clerk.com/precedent) - A comprehensive user management platform with beautifully designed, drop-in React components
+This project is for **fun and experimentation only**. It does not sell data, include ads, or intend to harm. All ratings are anonymous. Please use it responsibly and respectfully.
 
-### Platforms
+---
 
-- [Vercel](https://vercel.com/) – Easily preview & deploy changes with git
+## 🚀 Deployment
 
-### UI
+**rateme.pics** is fully deployed on [Vercel](https://vercel.com), leveraging:
 
-- [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework for rapid UI development
-- [Radix](https://www.radix-ui.com/) – Primitives like modal, popover, etc. to build a stellar user experience
-- [Framer Motion](https://framer.com/motion) – Motion library for React to animate components with ease
-- [Lucide](https://lucide.dev/) – Beautifully simple, pixel-perfect icons
-- [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) – Optimize custom fonts and remove external network requests for improved performance
-- [`ImageResponse`](https://nextjs.org/docs/app/api-reference/functions/image-response) – Generate dynamic Open Graph images at the edge
+* Edge functions for fast API routes
+* Blob storage for image hosting
+* Seamless integration with Next.js and TypeScript
 
-### Hooks and Utilities
+---
 
-- `useIntersectionObserver` –  React hook to observe when an element enters or leaves the viewport
-- `useLocalStorage` – Persist data in the browser's local storage
-- `useScroll` – React hook to observe scroll position ([example](https://github.com/steven-tey/precedent/blob/main/components/layout/navbar.tsx#L12))
-- `nFormatter` – Format numbers with suffixes like `1.2k` or `1.2M`
-- `capitalize` – Capitalize the first letter of a string
-- `truncate` – Truncate a string to a specified length
-- [`use-debounce`](https://www.npmjs.com/package/use-debounce) – Debounce a function call / state update
+## 🚫 Not a Reusable Template
 
-### Code Quality
+While the code is clean and functional, this project is not intended to be used as a template or starter repo.
 
-- [TypeScript](https://www.typescriptlang.org/) – Static type checker for end-to-end typesafety
-- [Prettier](https://prettier.io/) – Opinionated code formatter for consistent code style
-- [ESLint](https://eslint.org/) – Pluggable linter for Next.js and TypeScript
+It was built for a specific use case and lacks modularity or configuration for other projects.
 
-### Miscellaneous
+There is no internal documentation, component breakdown, or developer onboarding.
 
-- [Vercel Analytics](https://vercel.com/analytics) – Track unique visitors, pageviews, and more in a privacy-friendly way
+Use it as a reference or learning resource, not a plug-and-play base for your own apps.
 
-## Author
-
-- Steven Tey ([@steventey](https://twitter.com/steventey))
+If you're looking for a production-ready template, it's better to start from a documented boilerplate.
