@@ -1,5 +1,3 @@
----
-
 # rateme.pics
 
 ![screenshot-placeholder](readme.png)
