@@ -1,6 +1,6 @@
 # rateme.pics
 
-![screenshot-placeholder](readme.png)
+![screenshot-placeholder](public/readme.png)
 
 **rateme.pics** is a lightweight, just-for-fun web experiment inspired by Mark Zuckerberg's original FaceMash. Users upload photos and vote between pairs to determine which image looks better. It’s a social experiment in digital aesthetics and perception—built purely for entertainment and curiosity.
 
